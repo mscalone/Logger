@@ -72,6 +72,13 @@ as
   gc_pref_protect_admin_procs constant logger_prefs.pref_name%type := 'PROTECT_ADMIN_PROCS';
   gc_pref_install_schema constant logger_prefs.pref_name%type := 'INSTALL_SCHEMA';
   gc_pref_purge_after_days constant logger_prefs.pref_name%type := 'PURGE_AFTER_DAYS';
+  gc_pref_purge_after_days_debug constant logger_prefs.pref_name%type := 'PURGE_AFTER_DAYS_DEBUG';
+  gc_pref_purge_after_days_info constant logger_prefs.pref_name%type := 'PURGE_AFTER_DAYS_INFORMATION';
+  gc_pref_purge_after_days_warn constant logger_prefs.pref_name%type := 'PURGE_AFTER_DAYS_WARNING';
+  gc_pref_purge_after_days_error constant logger_prefs.pref_name%type := 'PURGE_AFTER_DAYS_ERROR';
+  gc_pref_purge_after_days_time constant logger_prefs.pref_name%type := 'PURGE_AFTER_DAYS_TIMING';
+  gc_pref_purge_after_days_sys constant logger_prefs.pref_name%type := 'PURGE_AFTER_DAYS_SYS_CONTEXT';
+  gc_pref_purge_after_days_apex constant logger_prefs.pref_name%type := 'PURGE_AFTER_DAYS_APEX';
   gc_pref_purge_min_level constant logger_prefs.pref_name%type := 'PURGE_MIN_LEVEL';
   gc_pref_logger_version constant logger_prefs.pref_name%type := 'LOGGER_VERSION';
   gc_pref_client_id_expire_hours constant logger_prefs.pref_name%type := 'PREF_BY_CLIENT_ID_EXPIRE_HOURS';
@@ -2111,6 +2118,13 @@ as
   is
     $if $$no_op is null or not $$no_op $then
       l_purge_after_days number := nvl(p_purge_after_days,get_pref(logger.gc_pref_purge_after_days));
+      l_days_debug number := nvl(p_purge_after_days, get_pref(gc_pref_purge_after_days_debug));
+      l_days_info number := nvl(p_purge_after_days, get_pref(gc_pref_purge_after_days_info));
+      l_days_warn number := nvl(p_purge_after_days, get_pref(gc_pref_purge_after_days_warn));
+      l_days_error number := nvl(p_purge_after_days, get_pref(gc_pref_purge_after_days_error));
+      l_days_time number := nvl(p_purge_after_days, get_pref(gc_pref_purge_after_days_time));
+      l_days_sys number := nvl(p_purge_after_days, get_pref(gc_pref_purge_after_days_sys));
+      l_days_apex number := nvl(p_purge_after_days, get_pref(gc_pref_purge_after_days_apex));
     $end
     pragma autonomous_transaction;
   begin
@@ -2119,11 +2133,20 @@ as
     $else
 
       if admin_security_check then
-        delete
-          from logger_logs
-         where logger_level >= p_purge_min_level
-           and time_stamp < systimestamp - NUMTODSINTERVAL(l_purge_after_days, 'day')
-           and logger_level > g_permanent;
+        delete from logger_logs
+        where logger_level >= p_purge_min_level
+          and logger_level > g_permanent
+          and time_stamp < systimestamp - NUMTODSINTERVAL(
+            case logger_level
+              when g_debug then l_days_debug
+              when g_information then l_days_info
+              when g_warning then l_days_warn
+              when g_error then l_days_error
+              when g_timing then l_days_time
+              when g_sys_context then l_days_sys
+              when g_apex then l_days_apex
+              else l_purge_after_days
+            end, 'day');
       end if;
     $end
     commit;

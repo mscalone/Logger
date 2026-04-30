@@ -211,6 +211,10 @@ Logger stores its configuration settings in LOGGER_PREFS. These are the followin
     <td>Purge logs, equal to or higher than PURGE_MIN_LEVEL, after this many days. A purge job is run each night to clean up logger.</td>
   </tr>
   <tr>
+    <td>PURGE_AFTER_DAYS_&lt;LEVEL&gt;</td>
+    <td>Specific retention settings per level. Replaces general PURGE_AFTER_DAYS for that specific level. If a preference does not exist or is null, logs for that specific level will not be purged automatically. Examples: PURGE_AFTER_DAYS_DEBUG, PURGE_AFTER_DAYS_INFORMATION, etc.</td>
+  </tr>
+  <tr>
     <td>PURGE_MIN_LEVEL</td>
     <td>Min level to purge logs used in auto Logger cleanup job.</td>
   </tr>

@@ -854,7 +854,9 @@ logger.del_pref(
 
 <a name="procedure-purge"></a>
 ### PURGE
-TODO_DESC
+Purges records from `LOGGER_LOGS` table.
+
+If `p_purge_after_days` is not passed, it will use the specific retention periods defined in `LOGGER_PREFS` such as `PURGE_AFTER_DAYS_DEBUG`, `PURGE_AFTER_DAYS_INFORMATION`, etc. If a specific log level preference is not defined (i.e., it does not exist in the table or is null), it will **not** purge logs for that level. The general `PURGE_AFTER_DAYS` preference is only used as a fallback for any undocumented or custom log levels. Passing a global `p_purge_after_days` value overrides all preferences and enforces that retention limit across all purged levels.
 
 #### Syntax
 ```sql
@@ -870,7 +872,7 @@ logger.purge(
   </tr>
   <tr>
     <td>p_purge_after_days</td>
-    <td>Purge entries older than n days.</td>
+    <td>Purge entries older than n days. If passed, overrides all preference table settings for all levels.</td>
   </tr>
     <tr>
     <td>p_purge_min_level</td>
@@ -880,7 +882,8 @@ logger.purge(
 
 #### Example
 ```sql
-TODO
+-- Manually purge everything older than 30 days
+exec logger.purge(p_purge_after_days => 30);
 ```
 
 
