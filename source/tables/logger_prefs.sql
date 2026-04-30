@@ -110,6 +110,13 @@ begin
           ,'PROTECT_ADMIN_PROCS'
           ,'PURGE_AFTER_DAYS'
           ,'PURGE_MIN_LEVEL'
+          ,'PURGE_AFTER_DAYS_DEBUG'
+          ,'PURGE_AFTER_DAYS_INFORMATION'
+          ,'PURGE_AFTER_DAYS_WARNING'
+          ,'PURGE_AFTER_DAYS_ERROR'
+          ,'PURGE_AFTER_DAYS_TIMING'
+          ,'PURGE_AFTER_DAYS_SYS_CONTEXT'
+          ,'PURGE_AFTER_DAYS_APEX'
         )
       then
         raise_application_error (-20000, 'Setting system level preferences are restricted to a set list.');
