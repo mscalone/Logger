@@ -1,5 +1,24 @@
 This page contains all of Logger's Change Logs. Starting in version 3.0.0 onwards, only major tickets will be listed here. To see a complete list of all the issues for each version, review the appropriate release page.
 
+<a name="change-log-3.2.0"></a>
+## Change Log 3.2.0
+[Download](https://github.com/OraOpenSource/Logger/raw/master/releases/logger_3.2.0.zip)<br/>
+[Release Page](https://github.com/OraOpenSource/Logger/issues?utf8=%E2%9C%93&q=milestone%3A%22Release+3.2.0%22)<br/>
+Release Articles
+
+<table border="0">
+  <tr>
+	<td>Issue#</td>
+    <td>Feature</td>
+    <td>Articles</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Configurable log retention days per log level. Added specific log-level retention preferences in `LOGGER_PREFS` (e.g., `PURGE_AFTER_DAYS_DEBUG`, `PURGE_AFTER_DAYS_INFORMATION`). If a specific preference is not set (i.e. does not exist in `LOGGER_PREFS`), the logs for that level will **not** be purged automatically. The general `PURGE_AFTER_DAYS` acts as a fallback only for undefined or custom log levels not covered by these preferences. Providing an explicit value via the `p_purge_after_days` parameter in `logger.purge` will override all preferences and enforce that retention across all purged levels.</td>
+    <td></td>
+  </tr>
+</table>
+
 <a name="change-log-3.1.1"></a>
 ## Change Log 3.1.1
 [Download](https://github.com/OraOpenSource/Logger/raw/master/releases/logger_3.1.1.zip)<br/>
